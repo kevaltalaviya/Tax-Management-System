@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TaxSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AdminInformation">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserName" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Password" Type="nchar" MaxLength="260" Nullable="false" />
+          <Property Name="Email" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="ResetPasswordCode" Type="nchar" MaxLength="260" />
+        </EntityType>
+        <EntityType Name="GSTINformation">
+          <Key>
+            <PropertyRef Name="Gid" />
+          </Key>
+          <Property Name="Gid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MRP" Type="numeric" Precision="8" Scale="0" Nullable="false" />
+          <Property Name="Uid" Type="int" Nullable="false" />
+          <Property Name="GST" Type="numeric" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="Bill" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Flag" Type="int" />
+        </EntityType>
+        <EntityType Name="GSTNumber">
+          <Key>
+            <PropertyRef Name="GnId" />
+          </Key>
+          <Property Name="GnId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Uid" Type="int" Nullable="false" />
+          <Property Name="GSTNumber" Type="nchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="PanCardDetail">
+          <Key>
+            <PropertyRef Name="PanNumber" />
+          </Key>
+          <Property Name="PanNumber" Type="nchar" MaxLength="11" Nullable="false" />
+          <Property Name="MobileNumber" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Registration">
+          <Key>
+            <PropertyRef Name="Uid" />
+          </Key>
+          <Property Name="Uid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nchar" MaxLength="25" Nullable="false" />
+          <Property Name="LastName" Type="nchar" MaxLength="15" Nullable="false" />
+          <Property Name="PanNumber" Type="nchar" MaxLength="11" Nullable="false" />
+          <Property Name="MobileNumber" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Email" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nchar" MaxLength="260" Nullable="false" />
+          <Property Name="BankName" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="AccountNumber" Type="nchar" MaxLength="14" Nullable="false" />
+          <Property Name="IFSC" Type="nchar" MaxLength="11" Nullable="false" />
+          <Property Name="ResetPasswordCode" Type="nchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TaxInformation">
+          <Key>
+            <PropertyRef Name="Tid" />
+          </Key>
+          <Property Name="Tid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Uid" Type="int" Nullable="false" />
+          <Property Name="Year" Type="nchar" MaxLength="8" Nullable="false" />
+          <Property Name="Status" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="TotalIncome" Type="numeric" Precision="8" Scale="0" Nullable="false" />
+          <Property Name="TotalTax" Type="numeric" Precision="8" Scale="0" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_GSTINformation_ToTable">
+          <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
+          <End Role="GSTINformation" Type="Self.GSTINformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registration">
+              <PropertyRef Name="Uid" />
+            </Principal>
+            <Dependent Role="GSTINformation">
+              <PropertyRef Name="Uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GSTNumbers_ToTable">
+          <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
+          <End Role="GSTNumber" Type="Self.GSTNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registration">
+              <PropertyRef Name="Uid" />
+            </Principal>
+            <Dependent Role="GSTNumber">
+              <PropertyRef Name="Uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxInformation_ToTable">
+          <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
+          <End Role="TaxInformation" Type="Self.TaxInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registration">
+              <PropertyRef Name="Uid" />
+            </Principal>
+            <Dependent Role="TaxInformation">
+              <PropertyRef Name="Uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TaxSystemModelStoreContainer">
+          <EntitySet Name="AdminInformation" EntityType="Self.AdminInformation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GSTINformation" EntityType="Self.GSTINformation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GSTNumber" EntityType="Self.GSTNumber" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PanCardDetail" EntityType="Self.PanCardDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Registration" EntityType="Self.Registration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaxInformation" EntityType="Self.TaxInformation" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_GSTINformation_ToTable" Association="Self.FK_GSTINformation_ToTable">
+            <End Role="Registration" EntitySet="Registration" />
+            <End Role="GSTINformation" EntitySet="GSTINformation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GSTNumbers_ToTable" Association="Self.FK_GSTNumbers_ToTable">
+            <End Role="Registration" EntitySet="Registration" />
+            <End Role="GSTNumber" EntitySet="GSTNumber" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxInformation_ToTable" Association="Self.FK_TaxInformation_ToTable">
+            <End Role="Registration" EntitySet="Registration" />
+            <End Role="TaxInformation" EntitySet="TaxInformation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TaxSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AdminInformation">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserName" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="260" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="ResetPasswordCode" Type="String" MaxLength="260" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="GSTINformation">
+          <Key>
+            <PropertyRef Name="Gid" />
+          </Key>
+          <Property Name="Gid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MRP" Type="Decimal" Precision="8" Scale="0" Nullable="false" />
+          <Property Name="Uid" Type="Int32" Nullable="false" />
+          <Property Name="GST" Type="Decimal" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="Bill" Type="String" MaxLength="100" Unicode="true" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Registration" Relationship="Self.FK_GSTINformation_ToTable" FromRole="GSTINformation" ToRole="Registration" />
+          <Property Name="Flag" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Registration">
+          <Key>
+            <PropertyRef Name="Uid" />
+          </Key>
+          <Property Name="Uid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="15" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="PanNumber" Type="String" MaxLength="11" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="260" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="BankName" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="AccountNumber" Type="String" Nullable="false" MaxLength="14" Unicode="true" FixedLength="true" />
+          <Property Name="IFSC" Type="String" MaxLength="11" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="GSTINformations" Relationship="Self.FK_GSTINformation_ToTable" FromRole="Registration" ToRole="GSTINformation" />
+          <NavigationProperty Name="TaxInformations" Relationship="Self.FK_TaxInformation_ToTable" FromRole="Registration" ToRole="TaxInformation" />
+          <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="GSTNumbers" Relationship="TaxSystemModel.FK_GSTNumbers_ToTable" FromRole="Registration" ToRole="GSTNumber" />
+        </EntityType>
+        <EntityType Name="TaxInformation">
+          <Key>
+            <PropertyRef Name="Tid" />
+          </Key>
+          <Property Name="Tid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Uid" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="String" Nullable="false" MaxLength="8" Unicode="true" FixedLength="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="TotalIncome" Type="Decimal" Precision="8" Scale="0" Nullable="false" />
+          <Property Name="TotalTax" Type="Decimal" Precision="8" Scale="0" Nullable="false" />
+          <NavigationProperty Name="Registration" Relationship="Self.FK_TaxInformation_ToTable" FromRole="TaxInformation" ToRole="Registration" />
+        </EntityType>
+        <Association Name="FK_GSTINformation_ToTable">
+          <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
+          <End Role="GSTINformation" Type="Self.GSTINformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registration">
+              <PropertyRef Name="Uid" />
+            </Principal>
+            <Dependent Role="GSTINformation">
+              <PropertyRef Name="Uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxInformation_ToTable">
+          <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
+          <End Role="TaxInformation" Type="Self.TaxInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registration">
+              <PropertyRef Name="Uid" />
+            </Principal>
+            <Dependent Role="TaxInformation">
+              <PropertyRef Name="Uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TaxSystemEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AdminInformations" EntityType="Self.AdminInformation" />
+          <EntitySet Name="GSTINformations" EntityType="Self.GSTINformation" />
+          <EntitySet Name="Registrations" EntityType="Self.Registration" />
+          <EntitySet Name="TaxInformations" EntityType="Self.TaxInformation" />
+          <AssociationSet Name="FK_GSTINformation_ToTable" Association="Self.FK_GSTINformation_ToTable">
+            <End Role="Registration" EntitySet="Registrations" />
+            <End Role="GSTINformation" EntitySet="GSTINformations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxInformation_ToTable" Association="Self.FK_TaxInformation_ToTable">
+            <End Role="Registration" EntitySet="Registrations" />
+            <End Role="TaxInformation" EntitySet="TaxInformations" />
+          </AssociationSet>
+          <EntitySet Name="GSTNumbers" EntityType="TaxSystemModel.GSTNumber" />
+          <AssociationSet Name="FK_GSTNumbers_ToTable" Association="TaxSystemModel.FK_GSTNumbers_ToTable">
+            <End Role="Registration" EntitySet="Registrations" />
+            <End Role="GSTNumber" EntitySet="GSTNumbers" />
+          </AssociationSet>
+          <EntitySet Name="PanCardDetails" EntityType="TaxSystemModel.PanCardDetail" />
+        </EntityContainer>
+        <EntityType Name="GSTNumber">
+          <Key>
+            <PropertyRef Name="GnId" />
+          </Key>
+          <Property Name="GnId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Uid" Type="Int32" Nullable="false" />
+          <Property Name="GSTNumber1" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Registration" Relationship="TaxSystemModel.FK_GSTNumbers_ToTable" FromRole="GSTNumber" ToRole="Registration" />
+        </EntityType>
+        <Association Name="FK_GSTNumbers_ToTable">
+          <End Type="TaxSystemModel.Registration" Role="Registration" Multiplicity="1" />
+          <End Type="TaxSystemModel.GSTNumber" Role="GSTNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registration">
+              <PropertyRef Name="Uid" />
+            </Principal>
+            <Dependent Role="GSTNumber">
+              <PropertyRef Name="Uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PanCardDetail">
+          <Key>
+            <PropertyRef Name="PanNumber" />
+          </Key>
+          <Property Name="PanNumber" Type="String" Nullable="false" MaxLength="11" FixedLength="true" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TaxSystemModelStoreContainer" CdmEntityContainer="TaxSystemEntities1">
+          <EntitySetMapping Name="AdminInformations">
+            <EntityTypeMapping TypeName="TaxSystemModel.AdminInformation">
+              <MappingFragment StoreEntitySet="AdminInformation">
+                <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GSTINformations">
+            <EntityTypeMapping TypeName="TaxSystemModel.GSTINformation">
+              <MappingFragment StoreEntitySet="GSTINformation">
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
+                <ScalarProperty Name="Gid" ColumnName="Gid" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="GST" ColumnName="GST" />
+                <ScalarProperty Name="Bill" ColumnName="Bill" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registrations">
+            <EntityTypeMapping TypeName="TaxSystemModel.Registration">
+              <MappingFragment StoreEntitySet="Registration">
+                <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="IFSC" ColumnName="IFSC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaxInformations">
+            <EntityTypeMapping TypeName="TaxSystemModel.TaxInformation">
+              <MappingFragment StoreEntitySet="TaxInformation">
+                <ScalarProperty Name="Tid" ColumnName="Tid" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TotalIncome" ColumnName="TotalIncome" />
+                <ScalarProperty Name="TotalTax" ColumnName="TotalTax" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GSTNumbers">
+            <EntityTypeMapping TypeName="TaxSystemModel.GSTNumber">
+              <MappingFragment StoreEntitySet="GSTNumber">
+                <ScalarProperty Name="GSTNumber1" ColumnName="GSTNumber" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="GnId" ColumnName="GnId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PanCardDetails">
+            <EntityTypeMapping TypeName="TaxSystemModel.PanCardDetail">
+              <MappingFragment StoreEntitySet="PanCardDetail">
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
