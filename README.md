@@ -47,5 +47,5 @@
 
 
 # Guidance By:
-		Prof. Apurva M. Mehta
+		Prof. Apurva A. Mehta
 		Prof. Jatayu H. Baxi
